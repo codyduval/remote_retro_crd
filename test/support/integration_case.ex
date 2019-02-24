@@ -29,25 +29,25 @@ defmodule RemoteRetro.IntegrationCase do
     end
   end
 
-  setup tags do
+  setup context do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
 
-    unless tags[:async] do
+    unless context[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
     end
 
     metadata = Phoenix.Ecto.SQL.Sandbox.metadata_for(Repo, self())
 
     retro =
-      case tags[:retro_stage] do
-        nil -> tags[:retro]
+      case context[:retro_stage] do
+        nil -> context[:retro]
         _ ->
-          tags[:retro]
-          |> Retro.changeset(%{stage: tags[:retro_stage]})
+          context[:retro]
+          |> Retro.changeset(%{stage: context[:retro_stage]})
           |> Repo.update!
       end
 
-    session = new_authenticated_browser_session(metadata)
+    session = new_authenticated_browser_session(context[:facilitator], metadata)
 
     {:ok, session: session, retro: retro}
   end
