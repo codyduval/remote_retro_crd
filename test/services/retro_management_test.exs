@@ -1,5 +1,5 @@
 defmodule RemoteRetro.RetroManagementTest do
-  use RemoteRetro.UserRetroCase
+  use RemoteRetro.UserRetroCase, async: false
   use Bamboo.Test, shared: true
 
   alias RemoteRetro.{Repo, Retro, User, Emails, TestHelpers}

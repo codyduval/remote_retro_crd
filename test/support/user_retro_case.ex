@@ -17,22 +17,24 @@ defmodule RemoteRetro.UserRetroCase do
 
     retro = Repo.insert!(%Retro{facilitator_id: facilitator.id, stage: "idea-generation"})
 
-    Repo.insert!(%Participation{user_id: facilitator.id, retro_id: retro.id})
-    Repo.insert!(%Participation{user_id: non_facilitator.id, retro_id: retro.id})
+    participation_one = Repo.insert!(%Participation{user_id: facilitator.id, retro_id: retro.id})
+    participation_two = Repo.insert!(%Participation{user_id: non_facilitator.id, retro_id: retro.id})
 
     on_exit fn ->
       # this callback needs to checkout its own connection since it
       # runs in its own process
       :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
-      Ecto.Adapters.SQL.Sandbox.mode(Repo, :auto)
-
-      user_ids = [facilitator.id, non_facilitator.id]
-      from(p in Participation, where: p.user_id in ^user_ids) |> Repo.delete_all
+      # Ecto.Adapters.SQL.Sandbox.mode(Repo, :auto)
 
       retro = Repo.get!(Retro, retro.id)
       Repo.delete(retro)
 
+      participation_ids = [participation_one.id, participation_two.id]
+      from(p in Participation, where: p.id in ^participation_ids) |> Repo.delete_all
+
+      user_ids = [facilitator.id, non_facilitator.id]
       from(u in User, where: u.id in ^user_ids) |> Repo.delete_all
+
 
       :ok
     end
