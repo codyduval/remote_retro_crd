@@ -12,12 +12,12 @@ defmodule RetroIdeaRealtimeUpdateTest do
     session_two = visit(session_two, retro_path)
 
     ideas_list_text = session_one |> find(Query.css(".sad.column")) |> Element.text()
-    refute String.contains?(ideas_list_text, "user stories lack clear business value")
+    refute ideas_list_text =~ "user stories lack clear business value"
 
     submit_idea(session_two, %{category: "sad", body: "user stories lack clear business value" })
 
     ideas_list_text = session_one |> find(Query.css(".sad.column")) |> Element.text
-    assert String.contains?(ideas_list_text, "user stories lack clear business value")
+    assert ideas_list_text =~ "user stories lack clear business value"
   end
 
   describe "when an idea already exists in a retro" do
@@ -45,9 +45,7 @@ defmodule RetroIdeaRealtimeUpdateTest do
       facilitator_session |> find(Query.button("Save")) |> Element.click
 
       # assert other client sees persistence indicator
-      ideas_list_text = participant_session |> find(Query.css(".confused.ideas")) |> Element.text
-
-      assert ideas_list_text == "No one uses the linter. (edited)"
+      assert_has(participant_session, Query.css(".confused.ideas", text: "No one uses the linter. (edited)"))
     end
 
     @tag [
