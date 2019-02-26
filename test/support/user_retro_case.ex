@@ -25,11 +25,12 @@ defmodule RemoteRetro.UserRetroCase do
       # runs in its own process
       :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
 
-      # participation records are deleted via CASCADE of the retro
+      user_ids = [facilitator.id, non_facilitator.id]
+      from(p in Participation, where: p.user_id in ^user_ids) |> Repo.delete_all
+
       retro = Repo.get!(Retro, retro.id)
       Repo.delete(retro)
 
-      user_ids = [facilitator.id, non_facilitator.id]
       from(u in User, where: u.id in ^user_ids) |> Repo.delete_all
 
       :ok
