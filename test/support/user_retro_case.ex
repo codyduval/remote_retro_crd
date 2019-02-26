@@ -29,9 +29,6 @@ defmodule RemoteRetro.UserRetroCase do
       retro = Repo.get!(Retro, retro.id)
       Repo.delete(retro)
 
-      participation_ids = [participation_one.id, participation_two.id]
-      from(p in Participation, where: p.id in ^participation_ids) |> Repo.delete_all
-
       user_ids = [facilitator.id, non_facilitator.id]
       from(u in User, where: u.id in ^user_ids) |> Repo.delete_all
 
