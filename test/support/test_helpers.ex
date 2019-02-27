@@ -80,6 +80,8 @@ defmodule RemoteRetro.TestHelpers do
   end
 
   def submit_idea(session, ~M{category, body}) do
+    assert_has session, Query.css("form")
+
     session
     |> find(Query.css("form"))
     |> click(Query.option(category))
