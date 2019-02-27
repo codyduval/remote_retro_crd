@@ -31,12 +31,11 @@ defmodule RemoteRetro.IntegrationCase do
 
   setup context do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
+    metadata = Phoenix.Ecto.SQL.Sandbox.metadata_for(Repo, self())
 
     unless context[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
     end
-
-    metadata = Phoenix.Ecto.SQL.Sandbox.metadata_for(Repo, self())
 
     retro =
       case context[:retro_stage] do
