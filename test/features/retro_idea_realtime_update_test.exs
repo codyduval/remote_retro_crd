@@ -58,12 +58,11 @@ defmodule RetroIdeaRealtimeUpdateTest do
       facilitator_session = visit(facilitator_session, retro_path)
       participant_session = visit(participant_session, retro_path)
 
-      ideas_list_text = participant_session |> find(Query.css(".happy.ideas li")) |> Element.text
-      assert ideas_list_text =~ ~r/slack time/
+      assert_has participant_session, Query.css(".happy.ideas li", text: "slack time!")
 
       delete_idea(facilitator_session, %{category: "happy", body: "slack time!"})
 
-      assert find(participant_session, Query.css(".happy.ideas li", count: 0))
+      assert_has participant_session, Query.css(".happy.ideas li", count: 0)
     end
   end
 
