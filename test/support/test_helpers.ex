@@ -71,6 +71,8 @@ defmodule RemoteRetro.TestHelpers do
   end
 
   def click_and_confirm(facilitator_session, button_text) do
+    assert_has(facilitator_session, Query.button(button_text))
+
     facilitator_session |> find(Query.button(button_text)) |> Element.click
     facilitator_session |> find(Query.button("Yes")) |> Element.click
   end
