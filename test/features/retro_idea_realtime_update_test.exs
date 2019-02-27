@@ -75,8 +75,11 @@ defmodule RetroIdeaRealtimeUpdateTest do
     ]
 
     test "it can be re-assigned to a different user", ~M{retro, facilitator, session: facilitator_session, non_facilitator} do
+      participant_session = new_authenticated_browser_session(non_facilitator)
+
       retro_path = "/retros/" <> retro.id
       facilitator_session = visit(facilitator_session, retro_path)
+      visit(participant_session, retro_path) # need the second user to enter the retro so that they're a valid assignee
 
       action_items_list_text = facilitator_session |> find(Query.css(".action-item.column")) |> Element.text()
       assert action_items_list_text =~ "blurgh (#{facilitator.name})"

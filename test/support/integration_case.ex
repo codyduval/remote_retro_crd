@@ -37,16 +37,14 @@ defmodule RemoteRetro.IntegrationCase do
       Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
     end
 
-    retro =
-      case context[:retro_stage] do
-        nil -> context[:retro]
-        _ ->
-          Repo.get(Retro, context[:retro].id)
-          |> Retro.changeset(%{stage: context[:retro_stage]})
-          |> Repo.update!
-      end
+    %{facilitator: facilitator} = context
 
-    session = new_authenticated_browser_session(context[:facilitator], metadata)
+    retro = Repo.insert!(%Retro{
+      stage: context[:retro_stage] || "idea-generation",
+      facilitator_id: facilitator.id
+    })
+
+    session = new_authenticated_browser_session(facilitator, metadata)
 
     {:ok, session: session, retro: retro}
   end

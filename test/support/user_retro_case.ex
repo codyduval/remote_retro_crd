@@ -24,7 +24,9 @@ defmodule RemoteRetro.UserRetroCase do
       # this callback needs to checkout its own connection since it
       # runs in its own process
       :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
-      # Ecto.Adapters.SQL.Sandbox.mode(Repo, :auto)
+
+      participation_ids = [participation_one.id, participation_two.id]
+      from(u in Participation, where: u.id in ^participation_ids) |> Repo.delete_all
 
       retro = Repo.get!(Retro, retro.id)
       Repo.delete(retro)
