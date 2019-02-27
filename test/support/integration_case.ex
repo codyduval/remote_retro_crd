@@ -41,7 +41,7 @@ defmodule RemoteRetro.IntegrationCase do
       case context[:retro_stage] do
         nil -> context[:retro]
         _ ->
-          context[:retro]
+          Repo.get(Retro, context[:retro].id)
           |> Retro.changeset(%{stage: context[:retro_stage]})
           |> Repo.update!
       end
