@@ -2,9 +2,8 @@ defmodule RemoteRetro.RetroChannelTest do
   use RemoteRetroWeb.ChannelCase, async: false
 
   alias RemoteRetro.{Repo, Idea, Retro, Vote}
-  alias RemoteRetroWeb.{RetroChannel, Presence, RetroManagement}
+  alias RemoteRetroWeb.{RetroChannel, Presence}
 
-  import Mock
   import ShorterMaps
 
   defp join_the_retro_channel(~M{retro, facilitator} = context) do
@@ -69,41 +68,12 @@ defmodule RemoteRetro.RetroChannelTest do
     end
   end
 
-  describe "when broadcast of the update fails" do
+  describe "pushing an invalid stage" do
     setup [:join_the_retro_channel]
 
-    test "rolls back the update to the retro", ~M{socket, retro} do
-      with_mock Phoenix.Channel, [broadcast!: fn(_, _, _) ->
-        raise "hell"
-      end] do
-        retro_before = Repo.get!(Retro, retro.id)
-        ref = push(socket, "retro_edited", %{stage: "action-items"})
-        assert_reply ref, :error # extra assertion required to wait for async process to complete
-
-        retro_after = Repo.get!(Retro, retro.id)
-
-        assert retro_after.stage == retro_before.stage
-      end
-    end
-  end
-
-  describe "when the retro update blows up" do
-    setup [:join_the_retro_channel]
-
-    with_mock RetroManagement, [update!: fn(_, _) ->
-      raise "hell"
-    end] do
-      test "an error reply is sent", ~M{socket} do
-        ref = push(socket, "retro_edited", %{stage: "year of the depend adult undergarment"})
-        assert_reply ref, :error
-      end
-
-      test "does not trigger an 'retro_edited' broadcast to all connected clients", ~M{socket} do
-        ref = push(socket, "retro_edited", %{stage: "year of the depend adult undergarment"})
-        assert_reply ref, :error
-
-        refute_broadcast("retro_edited", %{}, 10)
-      end
+    test "sends an error reply is sent", ~M{socket} do
+      ref = push(socket, "retro_edited", %{stage: "Rock 'n Roll Royalty"})
+      assert_reply ref, :error
     end
   end
 
@@ -130,22 +100,6 @@ defmodule RemoteRetro.RetroChannelTest do
       assert_reply ref, :ok
 
       assert_broadcast("idea_committed", %{category: "happy", body: "we're pacing well", id: _, user_id: ^user_id})
-    end
-
-    test "rolls back the idea insertion if broadcast!/3 fails", ~M{socket, facilitator} do
-      with_mock Phoenix.Channel, [broadcast!: fn(_, _, _) ->
-        raise "hell"
-      end] do
-        user_id = facilitator.id
-        idea_count_before = Repo.aggregate(Idea, :count, :id)
-
-        ref = push(socket, "idea_submitted", %{category: "happy", body: "we're pacing well", userId: user_id, assigneeId: nil})
-        assert_reply ref, :error # extra assertion required to wait for async process to complete before
-
-        idea_count_after = Repo.aggregate(Idea, :count, :id)
-
-        assert (idea_count_after - idea_count_before) == 0
-      end
     end
   end
 
@@ -224,17 +178,6 @@ defmodule RemoteRetro.RetroChannelTest do
       idea = Repo.get!(Idea, idea_id)
       assert %Idea{body: "hell's bells", category: "confused"} = idea
     end
-
-    @tag idea: %Idea{category: "sad", body: "no UI feedback on failure"}
-    test "a failed broadcast rolls back the update of the idea", ~M{socket, idea} do
-      with_mock Phoenix.Channel, [broadcast!: fn(_, _, _) -> raise "hell" end] do
-        idea_id = idea.id
-        ref = push(socket, "idea_edited", %{id: idea_id, body: "hell's bells", category: "confused", assignee_id: nil})
-        assert_reply ref, :error # ensure async process complete before checking db state
-
-        assert %{body: "no UI feedback on failure", category: "sad"} = Repo.get!(Idea, idea_id)
-      end
-    end
   end
 
   describe "pushing a delete event to the socket" do
@@ -256,19 +199,6 @@ defmodule RemoteRetro.RetroChannelTest do
       assert_reply ref, :ok # ensure async process complete before checking db state
 
       assert_raise(Ecto.NoResultsError, fn -> Repo.get!(Idea, idea_id) end)
-    end
-
-    @tag idea: %Idea{category: "sad", body: "no UI feedback on failure"}
-    test "a failed broadcast rolls back the deletion of the idea", ~M{socket, idea} do
-      with_mock Phoenix.Channel, [broadcast!: fn(_, _, _) ->
-        raise "hell"
-      end] do
-        idea_id = idea.id
-        ref = push(socket, "idea_deleted", idea_id)
-        assert_reply ref, :error # ensure async process complete before checking db state
-
-        assert Repo.get!(Idea, idea_id)
-      end
     end
   end
 
@@ -305,24 +235,6 @@ defmodule RemoteRetro.RetroChannelTest do
 
       assert_broadcast("vote_submitted", %{idea_id: ^idea_id, user_id: ^user_id, id: _})
     end
-
-    @tag idea: %Idea{category: "sad", body: "panda"}
-    test "rolls back the vote insertion if broadcast!/3 fails", ~M{socket, idea, facilitator} do
-      with_mock Phoenix.Channel, [broadcast!: fn(_, _, _) ->
-        raise "hell"
-      end] do
-        user_id = facilitator.id
-        idea_id = idea.id
-        vote_count_before = Repo.aggregate(Vote, :count, :id)
-
-        ref = push(socket, "vote_submitted", %{idea_id: idea_id, user_id: user_id})
-        assert_reply ref, :error # extra assertion required to wait for async process to complete before
-
-        vote_count_after = Repo.aggregate(Vote, :count, :id)
-
-        assert (vote_count_after - vote_count_before) == 0
-      end
-    end
   end
 
   describe "pushing a `vote_retracted` event with a given id" do
@@ -349,17 +261,6 @@ defmodule RemoteRetro.RetroChannelTest do
       assert_reply ref, :ok
 
       assert_push("vote_retracted", %{"id" => ^vote_id})
-    end
-
-    test "rolls back the vote retraction if broadcast fails, responding :error", ~M{socket, vote} do
-      with_mock Phoenix.Channel, [broadcast!: fn(_, _, _) ->
-        raise "hell"
-      end] do
-        ref = push(socket, "vote_retracted", %{id: vote.id})
-        assert_reply ref, :error # extra assertion required to wait for async process to complete
-
-        assert Repo.get(Vote, vote.id)
-      end
     end
   end
 
