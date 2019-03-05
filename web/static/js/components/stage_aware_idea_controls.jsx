@@ -5,6 +5,7 @@ import PropTypes from "prop-types"
 
 import * as AppPropTypes from "../prop_types"
 import VotingInterface from "./voting_interface"
+import GroupingControls from "./grouping_controls"
 import RightFloatedIdeaActions from "./right_floated_idea_actions"
 import { VOTE_LIMIT } from "../configs/retro_configs"
 import STAGES from "../configs/stages"
@@ -23,7 +24,7 @@ export const StageAwareIdeaControls = props => {
     canUserEditIdeaContents,
   } = props
 
-  if (stage === GROUPING) return null
+  if (stage === GROUPING) return <GroupingControls />
 
   const { category } = idea
 

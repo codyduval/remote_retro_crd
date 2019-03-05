@@ -3,6 +3,7 @@ import React from "react"
 import { StageAwareIdeaControls } from "../../web/static/js/components/stage_aware_idea_controls"
 import RightFloatedIdeaActions from "../../web/static/js/components/right_floated_idea_actions"
 import VotingInterface from "../../web/static/js/components/voting_interface"
+import GroupingControls from "../../web/static/js/components/grouping_controls"
 import STAGES from "../../web/static/js/configs/stages"
 
 const { IDEA_GENERATION, VOTING, GROUPING, ACTION_ITEMS, CLOSED } = STAGES
@@ -29,8 +30,8 @@ describe("<StageAwareIdeaControls />", () => {
       />
     )
 
-    it("renders no markup", () => {
-      expect(wrapper.html()).to.equal(null)
+    it("renders the grouping controls", () => {
+      expect(wrapper.find(GroupingControls)).to.have.length(1)
     })
   })
 
