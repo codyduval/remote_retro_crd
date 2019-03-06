@@ -10,9 +10,10 @@ import styles from "./css_modules/conditionally_draggable_idea_content.css"
 const { IDEA_GENERATION, GROUPING } = STAGES
 
 const handleDragStart = props => event => {
-  const { idea } = props
+  const { idea, actions } = props
   event.dataTransfer.dropEffect = "move"
   // event dataTransfer only supports strings
+  actions.initiateIdeaEditState(idea.id)
   event.dataTransfer.setData("idea", JSON.stringify(idea))
 }
 
