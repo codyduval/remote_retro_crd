@@ -29,43 +29,69 @@ describe("Idea component", () => {
   }
 
   context("when the idea is being edited locally", () => {
+    let wrapper
     const ideaInEditState = { ...idea, inEditState: true, isLocalEdit: true }
 
-    const wrapper = shallow(
-      <Idea
-        {...defaultProps}
-        idea={ideaInEditState}
-      />
-    )
+    context("when the stage is idea generation or action-items", () => {
+      ["idea-generation", "action-items"].forEach(stage => {
+        beforeEach(() => {
+          wrapper = shallow(
+            <Idea
+              {...defaultProps}
+              idea={ideaInEditState}
+              stage={stage}
+            />
+          )
+        })
 
-    it("renders an <IdeaEditForm/> as a child", () => {
-      expect(wrapper.find(IdeaEditForm).length).to.equal(1)
+        it("renders an <IdeaEditForm/> as a child", () => {
+          expect(wrapper.find(IdeaEditForm).length).to.equal(1)
+        })
+
+        context("when the idea is being edited on a *different* client", () => {
+          const ideaInEditState = { ...idea, inEditState: true, isLocalEdit: false }
+          const wrapper = shallow(
+            <Idea
+              {...defaultProps}
+              idea={ideaInEditState}
+            />
+          )
+
+          it("does not render an <IdeaEditForm/> as a child", () => {
+            expect(wrapper.find(IdeaEditForm).length).to.equal(0)
+          })
+
+          context("when the idea has a `liveEditText` value", () => {
+            const wrapper = shallow(
+              <Idea
+                {...defaultProps}
+                idea={{ ...ideaInEditState, liveEditText: "editing bigtime" }}
+              />
+            )
+
+            it("renders the <IdeaLiveEditContent /> as a child", () => {
+              expect(wrapper.find(IdeaLiveEditContent).length).to.equal(1)
+            })
+          })
+        })
+      })
     })
 
-    context("when the idea is being edited on a *different* client", () => {
-      const ideaInEditState = { ...idea, inEditState: true, isLocalEdit: false }
-      const wrapper = shallow(
-        <Idea
-          {...defaultProps}
-          idea={ideaInEditState}
-        />
-      )
+    context("when the stage is grouping", () => {
+      const stage = "grouping"
 
-      it("does not render an <IdeaEditForm/> as a child", () => {
-        expect(wrapper.find(IdeaEditForm).length).to.equal(0)
-      })
-
-      context("when the idea has a `liveEditText` value", () => {
-        const wrapper = shallow(
+      beforeEach(() => {
+        wrapper = shallow(
           <Idea
             {...defaultProps}
-            idea={{ ...ideaInEditState, liveEditText: "editing bigtime" }}
+            idea={ideaInEditState}
+            stage={stage}
           />
         )
+      })
 
-        it("renders the <IdeaLiveEditContent /> as a child", () => {
-          expect(wrapper.find(IdeaLiveEditContent).length).to.equal(1)
-        })
+      it("renders an ConditionallyDraggableIdeaContent as a child", () => {
+        expect(wrapper.find(ConditionallyDraggableIdeaContent).length).to.equal(1)
       })
     })
   })

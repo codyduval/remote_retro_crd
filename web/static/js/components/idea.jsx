@@ -18,13 +18,15 @@ import {
   actions,
 } from "../redux"
 
+const { IDEA_GENERATION, ACTION_ITEMS, GROUPING } = STAGES
+
 export const Idea = props => {
   const { idea, currentUser, retroChannel, stage, users, actions } = props
 
   const userIsEditing = idea.inEditState && idea.isLocalEdit
 
   let content
-  if (userIsEditing) {
+  if (userIsEditing && [IDEA_GENERATION, ACTION_ITEMS].includes(stage)) {
     content = (
       <IdeaEditForm
         idea={idea}
@@ -44,7 +46,7 @@ export const Idea = props => {
   return (
     <IdeaDropTarget
       tagName="li"
-      dragAndDropHandlersActive={stage === STAGES.GROUPING}
+      dragAndDropHandlersActive={stage === GROUPING}
       wrapperClassName={styles.index}
       onDropOfIdea={() => {}}
       title={idea.body}
