@@ -37,15 +37,19 @@ export class CategoryColumn extends Component {
 
   render() {
     const { handleDragOver, handleDrop, handleDragLeave, props, state } = this
-    const { category, ideas } = props
+    const { category, ideas, stage } = props
     const iconHeight = 45
+
+    const dragHandlers = stage === "idea-generation" ? {
+      onDragOver: handleDragOver,
+      onDragLeave: handleDragLeave,
+      onDrop: handleDrop,
+    } : {}
 
     return (
       <section
         className={`${category} ${styles.index} ${state.draggedOver ? "dragged-over" : ""} column`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
+        {...dragHandlers}
       >
         <div className={`${styles.columnHead} ui center aligned basic segment`}>
           <img src={`/images/${category}.svg`} height={iconHeight} width={iconHeight} alt={category} />
