@@ -33,9 +33,7 @@ export const CategoryColumn = props => {
         <p><strong>{category}</strong></p>
       </div>
       <div className={`ui fitted divider ${styles.divider}`} />
-      {!!ideas.length &&
-        <IdeaList {...props} />
-      }
+      {!!ideas.length && <IdeaList {...props} /> }
     </IdeaDropTarget>
   )
 }
