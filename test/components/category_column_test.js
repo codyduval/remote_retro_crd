@@ -45,36 +45,12 @@ describe("CategoryColumn", () => {
 
   describe("dropTargetSpec", () => {
     describe("#drop", () => {
-      context("when the draggedIdea belongs to a different category than the column", () => {
-        const mockDragMonitor = {
-          getItem: () => ({
-            draggedIdea: {
-              id: 66,
-              category: "sad",
-            },
-          }),
-        }
+      let actions
+      let mockDragMonitor
+      let categoryColumnProps
 
-        const actions = {
-          submitIdeaEditAsync: spy(),
-        }
-
-        const categoryColumnProps = {
-          category: "confused",
-          actions,
-        }
-
-        it("invokes submitIdeaEditAsync with the given idea but the column's category", () => {
-          dropTargetSpec.drop(categoryColumnProps, mockDragMonitor)
-          expect(actions.submitIdeaEditAsync).to.have.been.calledWith({
-            id: 66,
-            category: "confused",
-          })
-        })
-      })
-
-      context("when the draggedIdea belongs to a *same* category as the column", () => {
-        const mockDragMonitor = {
+      beforeEach(() => {
+        mockDragMonitor = {
           getItem: () => ({
             draggedIdea: {
               id: 66,
@@ -83,16 +59,37 @@ describe("CategoryColumn", () => {
           }),
         }
 
-        const actions = {
+        actions = {
           submitIdeaEditAsync: spy(),
         }
+      })
 
-        const categoryColumnProps = {
-          category: "confused",
-          actions,
-        }
+      context("when the columns category differ's from the draggedIdea's category", () => {
+        beforeEach(() => {
+          categoryColumnProps = {
+            category: "sad",
+            actions,
+          }
+        })
 
-        it("does not invoke submitIdeaEditAsync", () => {
+        it("invokes submitIdeaEditAsync with the given idea but the column's category", () => {
+          dropTargetSpec.drop(categoryColumnProps, mockDragMonitor)
+          expect(actions.submitIdeaEditAsync).to.have.been.calledWith({
+            id: 66,
+            category: "sad",
+          })
+        })
+      })
+
+      context("when the draggedIdea belongs to the *same* category as the column", () => {
+        beforeEach(() => {
+          categoryColumnProps = {
+            category: "confused",
+            actions,
+          }
+        })
+
+        it("does *not* invoke submitIdeaEditAsync", () => {
           dropTargetSpec.drop(categoryColumnProps, mockDragMonitor)
           expect(actions.submitIdeaEditAsync).to.not.have.been.called
         })
