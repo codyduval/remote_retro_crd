@@ -7,7 +7,7 @@ import IdeaContentBase from "./idea_content_base"
 import * as AppPropTypes from "../prop_types"
 
 // implement contract for react-dnd drag sources
-const dragSourceContract = {
+export const dragSourceSpec = {
   beginDrag: props => {
     return {
       draggedIdea: props.idea,
@@ -52,6 +52,6 @@ IdeaContentConnected.defaultProps = {
 
 export default DragSource(
   "IDEA",
-  dragSourceContract,
+  dragSourceSpec,
   collect
 )(IdeaContentConnected)
