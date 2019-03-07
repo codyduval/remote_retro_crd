@@ -10,7 +10,7 @@ import * as AppPropTypes from "../prop_types"
 const dragSourceContract = {
   beginDrag: props => {
     return {
-      idea: props.idea,
+      draggedIdea: props.idea,
     }
   },
 }

@@ -60,8 +60,13 @@ const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(actionCreators, dispatch),
 })
 
-const spec = {
-  hover: (props, monitor, component) => {},
+export const dropTargetSpec = {
+  drop: (props, monitor) => {
+    const { draggedIdea } = monitor.getItem()
+    const { actions, category } = props
+
+    actions.submitIdeaEditAsync({ ...draggedIdea, category })
+  },
 }
 
 const collect = (connect, monitor) => ({
@@ -69,7 +74,7 @@ const collect = (connect, monitor) => ({
   draggedOver: monitor.isOver({ shallow: true }),
 })
 
-const CategoryColumnAsDropTarget = DropTarget("IDEA", spec, collect)(CategoryColumn)
+const CategoryColumnAsDropTarget = DropTarget("IDEA", dropTargetSpec, collect)(CategoryColumn)
 
 export default connect(
   mapStateToProps,

@@ -1,24 +1,8 @@
-import React from "react"
-import { shallow } from "enzyme"
-import { spy, stub } from "sinon"
+import { spy } from "sinon"
 
-import { CategoryColumn, mapStateToProps } from "../../web/static/js/components/category_column"
-import STAGES from "../../web/static/js/configs/stages"
-
-const { IDEA_GENERATION } = STAGES
+import { mapStateToProps, dropTargetSpec } from "../../web/static/js/components/category_column"
 
 describe("CategoryColumn", () => {
-  let wrapper
-  const mockActions = { submitIdeaEditAsync: () => {} }
-  const defaultProps = {
-    currentUser: { given_name: "daniel" },
-    actions: mockActions,
-    votes: [],
-    ideas: [],
-    stage: IDEA_GENERATION,
-    category: "confused",
-  }
-
   describe("mapStateToProps", () => {
     context("when every idea passed in the ideas prop matches the column's category", () => {
       it("returns all of those ideas in the props", () => {
@@ -55,6 +39,38 @@ describe("CategoryColumn", () => {
           body: "fassssst build",
           category: "happy",
         }])
+      })
+    })
+  })
+
+  describe("dropTargetSpec", () => {
+    describe("#drop", () => {
+      context("when the draggedIdea belongs to a different category than the column", () => {
+        const mockDragMonitor = {
+          getItem: () => ({
+            draggedIdea: {
+              id: 66,
+              category: "sad",
+            },
+          }),
+        }
+
+        const actions = {
+          submitIdeaEditAsync: spy(),
+        }
+
+        const categoryColumnProps = {
+          category: "confused",
+          actions,
+        }
+
+        it("invokes submitIdeaEditAsync with the given idea but the column's category", () => {
+          dropTargetSpec.drop(categoryColumnProps, mockDragMonitor)
+          expect(actions.submitIdeaEditAsync).to.have.been.calledWith({
+            id: 66,
+            category: "confused",
+          })
+        })
       })
     })
   })
