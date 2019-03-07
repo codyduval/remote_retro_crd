@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import { DropTarget } from "react-dnd"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 
@@ -9,18 +10,6 @@ import { actions as actionCreators } from "../redux"
 
 export class CategoryColumn extends Component {
   state = {}
-
-  handleDragOver = event => {
-    this.setState({ draggedOver: true })
-    event.preventDefault()
-  }
-
-  handleDragLeave = event => {
-    const { currentTarget, relatedTarget } = event
-    if (currentTarget.contains(relatedTarget)) { return }
-
-    this.setState({ draggedOver: false })
-  }
 
   handleDrop = event => {
     const ideaData = event.dataTransfer.getData("idea")
@@ -36,8 +25,8 @@ export class CategoryColumn extends Component {
   }
 
   render() {
-    const { handleDragOver, handleDrop, handleDragLeave, props, state } = this
-    const { category, ideas, stage } = props
+    const { handleDragOver, handleDrop, handleDragLeave, props } = this
+    const { category, ideas, stage, connectDropTarget, draggedOver } = props
     const iconHeight = 45
 
     const dragHandlers = stage === "idea-generation" ? {
@@ -46,9 +35,9 @@ export class CategoryColumn extends Component {
       onDrop: handleDrop,
     } : {}
 
-    return (
+    return connectDropTarget(
       <section
-        className={`${category} ${styles.index} ${state.draggedOver ? "dragged-over" : ""} column`}
+        className={`${category} ${styles.index} ${draggedOver ? "dragged-over" : ""} column`}
         {...dragHandlers}
       >
         <div className={`${styles.columnHead} ui center aligned basic segment`}>
@@ -84,7 +73,18 @@ const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(actionCreators, dispatch),
 })
 
+const spec = {
+  hover: (props, monitor, component) => {},
+}
+
+const collect = (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  draggedOver: monitor.isOver({ shallow: true }),
+})
+
+const CategoryColumnAsDropTarget = DropTarget("IDEA", spec, collect)(CategoryColumn)
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CategoryColumn)
+)(CategoryColumnAsDropTarget)
