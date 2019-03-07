@@ -26,6 +26,7 @@ const collect = (connect, monitor) => {
 const IdeaContentConnected = props => {
   const { connectDragSource, ...rest } = props
 
+  // connect drag source requires a native html element for applying drag-n-drop handlers
   return connectDragSource(
     <div>
       <IdeaContentBase {...rest} />
