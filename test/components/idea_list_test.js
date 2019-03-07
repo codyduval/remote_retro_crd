@@ -9,7 +9,8 @@ const { IDEA_GENERATION, VOTING, ACTION_ITEMS, CLOSED } = STAGES
 describe("IdeaList", () => {
   const mockRetroChannel = { on: () => {}, push: () => {} }
   const defaultProps = {
-    currentUser: { given_name: "daniel" },
+    currentUser: { given_name: "daniel", is_facilitator: true },
+    isTabletOrAbove: false,
     retroChannel: mockRetroChannel,
     votes: [],
     ideas: [],

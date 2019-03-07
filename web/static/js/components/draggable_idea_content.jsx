@@ -42,10 +42,12 @@ IdeaContentConnected.propTypes = {
   assignee: AppPropTypes.presence,
   canUserEditIdeaContents: PropTypes.bool.isRequired,
   isTabletOrAbove: PropTypes.bool.isRequired,
+  connectDragSource: PropTypes.func,
 }
 
 IdeaContentConnected.defaultProps = {
   assignee: null,
+  connectDragSource: node => node,
 }
 
 export default DragSource(

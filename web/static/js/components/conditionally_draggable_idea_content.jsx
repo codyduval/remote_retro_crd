@@ -1,8 +1,8 @@
 import React from "react"
-import { DragSource } from "react-dnd"
 import PropTypes from "prop-types"
 
 import DraggableIdeaContent from "./draggable_idea_content"
+import IdeaContentBase from "./idea_content_base"
 
 import * as AppPropTypes from "../prop_types"
 import STAGES from "../configs/stages"
@@ -16,13 +16,15 @@ const ConditionallyDraggableIdeaContent = props => {
     isTabletOrAbove,
   } = props
 
-  // const isGrouping = stage === GROUPING
-  // const isIdeaGeneration = stage === IDEA_GENERATION
+  const isGrouping = stage === GROUPING
+  const isIdeaGeneration = stage === IDEA_GENERATION
 
-  // const isIdeaDragEligible = isGrouping || (isIdeaGeneration && canUserEditIdeaContents)
+  const isIdeaDragEligible = isTabletOrAbove && (isGrouping || (isIdeaGeneration && canUserEditIdeaContents))
 
-  return (
+  return isIdeaDragEligible ? (
     <DraggableIdeaContent {...props} />
+  ) : (
+    <IdeaContentBase {...props} />
   )
 }
 

@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import PropTypes from "prop-types"
 import { DropTarget } from "react-dnd"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
@@ -11,41 +12,20 @@ import { actions as actionCreators } from "../redux"
 export class CategoryColumn extends Component {
   state = {}
 
-  handleDrop = event => {
-    const ideaData = event.dataTransfer.getData("idea")
-    if (!ideaData) { return }
-
-    this.setState({ draggedOver: false })
-    event.preventDefault()
-    const { category, actions } = this.props
-
-    const idea = JSON.parse(ideaData)
-
-    actions.submitIdeaEditAsync({ ...idea, category })
-  }
-
   render() {
-    const { handleDragOver, handleDrop, handleDragLeave, props } = this
-    const { category, ideas, stage, connectDropTarget, draggedOver } = props
+    const { category, ideas, connectDropTarget, draggedOver } = this.props
     const iconHeight = 45
-
-    const dragHandlers = stage === "idea-generation" ? {
-      onDragOver: handleDragOver,
-      onDragLeave: handleDragLeave,
-      onDrop: handleDrop,
-    } : {}
 
     return connectDropTarget(
       <section
         className={`${category} ${styles.index} ${draggedOver ? "dragged-over" : ""} column`}
-        {...dragHandlers}
       >
         <div className={`${styles.columnHead} ui center aligned basic segment`}>
           <img src={`/images/${category}.svg`} height={iconHeight} width={iconHeight} alt={category} />
           <p><strong>{category}</strong></p>
         </div>
         <div className={`ui fitted divider ${styles.divider}`} />
-        { !!ideas.length && <IdeaList {...props} /> }
+        { !!ideas.length && <IdeaList {...this.props} /> }
 
         <span className="overlay" />
       </section>
@@ -59,6 +39,13 @@ CategoryColumn.propTypes = {
   votes: AppPropTypes.votes.isRequired,
   stage: AppPropTypes.stage.isRequired,
   actions: AppPropTypes.actions.isRequired,
+  connectDropTarget: PropTypes.func,
+  draggedOver: PropTypes.bool,
+}
+
+CategoryColumn.defaultProps = {
+  connectDropTarget: node => node,
+  draggedOver: false,
 }
 
 export const mapStateToProps = ({ votes, ideas, alert }, props) => {
