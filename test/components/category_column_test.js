@@ -72,6 +72,31 @@ describe("CategoryColumn", () => {
           })
         })
       })
+
+      context("when the draggedIdea belongs to a *same* category as the column", () => {
+        const mockDragMonitor = {
+          getItem: () => ({
+            draggedIdea: {
+              id: 66,
+              category: "confused",
+            },
+          }),
+        }
+
+        const actions = {
+          submitIdeaEditAsync: spy(),
+        }
+
+        const categoryColumnProps = {
+          category: "confused",
+          actions,
+        }
+
+        it("does not invoke submitIdeaEditAsync", () => {
+          dropTargetSpec.drop(categoryColumnProps, mockDragMonitor)
+          expect(actions.submitIdeaEditAsync).to.not.have.been.called
+        })
+      })
     })
   })
 })

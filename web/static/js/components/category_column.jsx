@@ -65,6 +65,8 @@ export const dropTargetSpec = {
     const { draggedIdea } = monitor.getItem()
     const { actions, category } = props
 
+    if (draggedIdea.category === category) return
+
     actions.submitIdeaEditAsync({ ...draggedIdea, category })
   },
 }
