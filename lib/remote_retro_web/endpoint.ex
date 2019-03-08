@@ -1,7 +1,7 @@
 defmodule RemoteRetroWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :remote_retro
 
-  socket("/socket", RemoteRetroWeb.UserSocket)
+  socket("/socket", RemoteRetroWeb.UserSocket, websocket: [timeout: 45_000])
 
   if Application.get_env(:remote_retro, :sql_sandbox) do
     plug(Phoenix.Ecto.SQL.Sandbox)
