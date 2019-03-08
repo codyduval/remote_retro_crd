@@ -8,9 +8,11 @@ import * as AppPropTypes from "../prop_types"
 
 // implement contract for react-dnd drag sources
 export const dragSourceSpec = {
-  beginDrag: props => {
+  beginDrag: ({ idea }) => {
+    const { id, category, body, assignee_id } = idea // eslint-disable-line camelcase
+
     return {
-      draggedIdea: props.idea,
+      draggedIdea: { id, category, body, assignee_id },
     }
   },
 }
