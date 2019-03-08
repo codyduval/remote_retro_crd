@@ -1,7 +1,7 @@
 defmodule RemoteRetroWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :remote_retro
 
-  socket("/socket", RemoteRetroWeb.UserSocket, websocket: [timeout: 45_000])
+  socket("/socket", RemoteRetroWeb.UserSocket, websocket: [timeout: 45_000], longpoll: false)
 
   if Application.get_env(:remote_retro, :sql_sandbox) do
     plug(Phoenix.Ecto.SQL.Sandbox)
@@ -28,7 +28,7 @@ defmodule RemoteRetroWeb.Endpoint do
     Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
-    json_decoder: Poison
+    json_decoder: Phoenix.json_library()
   )
 
   plug(Plug.MethodOverride)

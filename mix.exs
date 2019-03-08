@@ -14,7 +14,7 @@ defmodule RemoteRetro.Mixfile do
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [coveralls: :test],
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
     ]
   end
 
@@ -59,7 +59,7 @@ defmodule RemoteRetro.Mixfile do
       {:credo, "~> 0.3", only: [:dev, :test]},
       {:apex, "~>1.2.0", only: [:dev, :test]},
       {:timex, "~> 3.1"},
-      {:jason, "~> 1.1.2"}
+      {:jason, "~> 1.1.2"},
     ]
   end
 
@@ -75,7 +75,7 @@ defmodule RemoteRetro.Mixfile do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "test --exclude feature_test"],
       e2e: ["end_to_end"],
-      defaults: ["preflight", "phx.server"]
+      defaults: ["preflight", "phx.server"],
     ]
   end
 
