@@ -11,22 +11,18 @@ class RetroChannel {
   }
 }
 
-const handlePresence = (retroChannel, syncPresenceDiff, setPresences) => {
-  const presence = new Presence(retroChannel)
+export const handlePresence = (presence, setPresences) => {
   const dispatchPresences = () => {
     const users = presence.list((_token, presence) => (presence.user))
     setPresences(users)
   }
 
-  presence.onJoin(dispatchPresences)
-  presence.onLeave(() => syncPresenceDiff)
   presence.onSync(dispatchPresences)
 }
 
 export const applyListenersWithDispatch = (retroChannel, store, actions) => {
   const { addIdea,
     updateRetroSync,
-    syncPresenceDiff,
     setPresences,
     updateIdea,
     deleteIdea,
@@ -34,7 +30,8 @@ export const applyListenersWithDispatch = (retroChannel, store, actions) => {
     updatePresence,
     retractVote } = actions
 
-  handlePresence(retroChannel, syncPresenceDiff, setPresences)
+  const presence = new Presence(retroChannel)
+  handlePresence(presence, setPresences)
 
   retroChannel.on("idea_committed", addIdea)
 
