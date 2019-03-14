@@ -143,15 +143,25 @@ describe("actionCreators", () => {
 
       describe("when the push results in an error", () => {
         let push
+        let clock
+
+        beforeEach(() => {
+          clock = sinon.useFakeTimers()
+        })
 
         it.only("dispatches an error", () => {
           console.log(mockRetroChannel.bindings)
           push = mockRetroChannel.push("anyEventJustNeedThePushInstance", { foo: "bar" })
+          clock.tick(3000)
           console.log(push.channel.bindings)
           // push.trigger("error", {})
           const dispatchSpy = sinon.spy()
           thunk(dispatchSpy, undefined, mockRetroChannel)
+
+          clock.tick(3000)
+
           push.trigger("error", {})
+          clock.tick(3000)
           console.log(push.channel.bindings)
 
 
