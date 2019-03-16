@@ -75,19 +75,15 @@
     </div>
   </div>
 
-  <div class="ui very padded segment center aligned relaxed stackable grid">
-    <div class="row">
-      <div class="ten wide column">
-        <h2 class="ui icon header">
-          <i class="icon">
-            <a href="http://stridenyc.com?utm_campaign=RemoteRetro&utm_source=Micro%20Website&utm_medium=remoteretro">
-              <img height="80" width="80" src="<%= Routes.static_path(@conn, "/images/stride_logo.png") %>" alt="Stride Logo">
-            </a>
-          </i>
-          An Open Source Project by <a href="http://stridenyc.com?utm_campaign=RemoteRetro&utm_source=Micro%20Website&utm_medium=remoteretro" class="stride-link">Stride Consulting</a>
-        </h2>
-      </div>
-    </div>
+  <div class="ui very padded segment center aligned relaxed grid">
+    <h2 class="ui icon header">
+      <i class="icon">
+        <a href="http://stridenyc.com?utm_campaign=RemoteRetro&utm_source=Micro%20Website&utm_medium=remoteretro">
+          <img height="80" width="80" src="<%= Routes.static_path(@conn, "/images/stride_logo.png") %>" alt="Stride Logo">
+        </a>
+      </i>
+      <a href="http://stridenyc.com?utm_campaign=RemoteRetro&utm_source=Micro%20Website&utm_medium=remoteretro" class="stride-link">An Open Source Project by Stride Consulting</a>
+    </h2>
   </div>
   <div class="ui very padded segment testimonials">
     <div class="ui two column stackable centered grid">
