@@ -76,15 +76,16 @@
   </div>
 
   <div class="ui very padded segment center aligned grid an-open-source-project-from-stride-consulting">
-    <h2 class="ui icon header">
-      <i class="icon">
-        <a href="http://stridenyc.com?utm_campaign=RemoteRetro&utm_source=Micro%20Website&utm_medium=remoteretro">
+    <a href="http://stridenyc.com?utm_campaign=RemoteRetro&utm_source=Micro%20Website&utm_medium=remoteretro">
+      <h2 class="ui icon header">
+        <i class="icon">
           <img height="80" width="80" src="<%= Routes.static_path(@conn, "/images/stride_logo.png") %>" alt="Stride Logo">
-        </a>
-      </i>
-      <a href="http://stridenyc.com?utm_campaign=RemoteRetro&utm_source=Micro%20Website&utm_medium=remoteretro" class="stride-link">An Open Source Project by Stride Consulting</a>
-    </h2>
+        </i>
+        An Open Source Project by Stride Consulting
+      </h2>
+    </a>
   </div>
+
   <div class="ui very padded segment testimonials">
     <div class="ui two column stackable centered grid">
       <div class="column">
