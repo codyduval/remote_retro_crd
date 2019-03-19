@@ -78,6 +78,7 @@
               <div class="ui tiny image"><img src="<%= Routes.static_path(@conn, "/images/stride_logo.png") %>" alt="Stride" /></div>
             </div>
           </a>
+          <div id="stage-help-icon"></div>
 
           <%= if @current_user do %>
             <a href="/logout" class="ui mini compact logout button">
