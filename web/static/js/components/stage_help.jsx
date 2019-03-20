@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import ReactDOM from "react-dom"
-import PropTypes from "prop-types"
 
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
@@ -40,7 +39,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 StageHelp.propTypes = {
-  retro: PropTypes.object.isRequired,
+  retro: AppPropTypes.retro.isRequired,
   actions: AppPropTypes.actions.isRequired,
 }
 
