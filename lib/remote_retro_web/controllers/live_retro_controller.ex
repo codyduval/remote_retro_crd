@@ -1,28 +1,16 @@
 defmodule RemoteRetroWeb.LiveRetroController do
   use RemoteRetroWeb, :controller
+  alias Phoenix.{LiveView, Token}
+
   alias RemoteRetro.{Retro, Participation, Idea}
-  alias Phoenix.Token
   alias RemoteRetroWeb.{Presence, PresenceUtils}
-
-  def index(conn, _params) do
-    user = get_session(conn, "current_user")
-
-    render(conn, "index.html", %{
-      current_user: user,
-      retros: recent_retros_with_action_items_preloaded(user),
-    })
-  end
 
   def show(conn, params) do
     user = get_session(conn, "current_user")
 
     soft_insert_participation_record!(user, params["id"])
 
-    render(conn, "show.html", %{
-      user_token: Token.sign(conn, "user", user),
-      retro_uuid: params["id"],
-      include_js: false,
-    })
+    LiveView.Controller.live_render(conn, RemoteRetroWeb.LiveRetroView, session: %{user_token: "123"})
   end
 
   def create(conn, _params) do

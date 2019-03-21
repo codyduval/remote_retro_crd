@@ -33,7 +33,6 @@ defmodule RemoteRetroWeb.Router do
     get("/auth/google", AuthController, :index)
     get("/auth/google/callback", @auth_controller, :callback)
     get("/logout", AuthController, :logout)
-    live("/live_retros", RemoteRetroWeb.Lobby)
   end
 
   scope "/retros", RemoteRetroWeb do
@@ -42,9 +41,9 @@ defmodule RemoteRetroWeb.Router do
     resources("/", RetroController, only: [:index, :create, :show])
   end
 
-  # scope "/live_retros", RemoteRetroWeb do
-  # pipe_through([:browser, :authentication_required])
+  scope "/live_retros", RemoteRetroWeb do
+    pipe_through([:browser, :authentication_required])
 
-  # resources("/", LiveRetroController, only: [:index, :create, :show])
-  # end
+    resources("/", LiveRetroController, only: [:create, :show])
+  end
 end
