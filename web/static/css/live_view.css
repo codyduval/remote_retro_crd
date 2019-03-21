@@ -1,0 +1,73 @@
+:global(.ui.grid) {
+  margin: 0 auto;
+
+  :global(.variable-column) {
+    padding: 8.5rem 0 5rem 0;
+
+    @media(max-width: 768px) {
+      padding: 4.5rem 3rem;
+    }
+  }
+}
+
+:global(.basic.segment) {
+  :global(.horizontal.list) {
+    margin-left: 0;
+  }
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-bottom: 0.5rem;
+  padding-top: 0;
+
+  /* user list scrolls horizontally */
+  width: 100%;
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+
+:global(.basic.segment) {
+  :global(.wrap) {
+    max-width: 28rem;
+    max-height: 24rem;
+    display: inline-block;
+    white-space: initial;
+    overflow-x: scroll;
+
+    :global(.item), :global(.item:first-child){
+      margin: 0rem 1rem;
+    }
+  }
+}
+
+:global(.wrapper) {
+  /* Override hyper-specific Semantic UI styles*/
+  padding-bottom: 0 !important;
+  &::before { content: "" !important; }
+
+  :global(.picture) {
+    --sidePadding: 0.4rem;
+    height: calc(var(--sidePadding) * 9);
+    padding-left: var(--sidePadding);
+    padding-right: var(--sidePadding);
+    border-radius: 50%;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  :global(.all-votes-in) {
+    color: var(--semantic-green);
+    font-size: 0.7rem;
+    font-weight: 600;
+
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+    transition-delay: 700ms; /* allows vote increment animation to finish, allowing eye to shift */
+
+    &:global(.opaque) {
+      opacity: 1;
+    }
+  }
+}
+

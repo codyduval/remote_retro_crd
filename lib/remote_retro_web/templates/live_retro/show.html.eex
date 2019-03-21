@@ -1,0 +1,39 @@
+<div class="react-root">
+    <div class="ui centered grid">
+      <div class="sixteen wide mobile eight wide tablet four wide computer column variable-column">
+        <h1 class="ui dividing header">
+          Retro Lobby
+        </h1>
+        <span>
+          As <strong>facilitator</strong> of this retro,
+          it will be your responsibility to advance the retro once your party has arrived.
+          Get them in here!
+        </span>
+
+        <span>
+          Once your party has arrived, your <strong>facilitator</strong>, {facilitatorName}, will
+          begin the retro. Until then, hold tight!
+        </span>
+      </div>
+      <div class="row">
+        <h2 class="ui medium dividing header">Current Users</h2>
+        <section class="ui center aligned basic segment">
+          <ul id="user-list" class="ui tiny horizontal list">
+            <li class="item wrapper">
+              <img class="picture" src="" alt="picture" />
+              <span class="all-votes-in">ALL VOTES IN</span>
+            </li>
+          </ul>
+        </section>
+        users here
+      </div>
+      <div class="row">
+        button
+        <StageProgressionButton
+          {...props}
+          class="thirteen wide mobile eight wide tablet four wide computer column"
+          config={progressionConfig}
+        />
+      </div>
+    </div>
+</div>

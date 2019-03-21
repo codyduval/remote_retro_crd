@@ -6,7 +6,7 @@ defmodule RemoteRetro.Mixfile do
       app: :remote_retro,
       version: app_version(),
       default_task: "defaults",
-      elixir: "1.6.5",
+      elixir: "1.7.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       build_embedded: Mix.env() == :prod,
@@ -34,7 +34,7 @@ defmodule RemoteRetro.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.4.1"},
+      {:phoenix, "~> 1.4.2"},
       {:phoenix_pubsub, "~> 1.1.0"},
       {:phoenix_ecto, "~> 4.0.0"},
       {:ecto_sql, "~> 3.0.5"},
@@ -60,6 +60,7 @@ defmodule RemoteRetro.Mixfile do
       {:apex, "~>1.2.0", only: [:dev, :test]},
       {:timex, "~> 3.1"},
       {:jason, "~> 1.1.2"},
+      {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"},
     ]
   end
 

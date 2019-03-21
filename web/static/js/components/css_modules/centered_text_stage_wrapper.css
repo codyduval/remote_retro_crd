@@ -1,4 +1,4 @@
-:global(.ui.grid).index {
+:global(.ui.grid) {
   margin: 0 auto;
 
   .variable-column {

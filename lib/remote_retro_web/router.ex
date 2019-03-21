@@ -18,6 +18,7 @@ defmodule RemoteRetroWeb.Router do
     plug(:accepts, ["html"])
     plug(:fetch_session)
     plug(:fetch_flash)
+    plug(Phoenix.LiveView.Flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
     plug(SetCurrentUser)
@@ -32,6 +33,7 @@ defmodule RemoteRetroWeb.Router do
     get("/auth/google", AuthController, :index)
     get("/auth/google/callback", @auth_controller, :callback)
     get("/logout", AuthController, :logout)
+    live("/live_retros", RemoteRetroWeb.Lobby)
   end
 
   scope "/retros", RemoteRetroWeb do
@@ -39,4 +41,10 @@ defmodule RemoteRetroWeb.Router do
 
     resources("/", RetroController, only: [:index, :create, :show])
   end
+
+  # scope "/live_retros", RemoteRetroWeb do
+  # pipe_through([:browser, :authentication_required])
+
+  # resources("/", LiveRetroController, only: [:index, :create, :show])
+  # end
 end

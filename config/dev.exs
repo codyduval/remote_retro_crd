@@ -21,6 +21,7 @@ config :remote_retro, RemoteRetroWeb.Endpoint,
       ~r{priv/gettext/.*(po)$},
       ~r{lib/remote_retro_web/views/.*(ex)$},
       ~r{lib/remote_retro_web/templates/.*(eex)$},
+      ~r{lib/remote_retro_web/live/.*(ex)$},
     ],
   ]
 
